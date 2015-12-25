@@ -1,0 +1,16 @@
+body {
+  font-size: 11px;
+}
+
+p {
+  font-family: monospace;
+  line-height: 18px;
+  font-size: 18px;
+  background-color: red;
+  white-space: pre;
+  margin: 0px;
+}
+
+.container {
+  width: 40em;
+}
