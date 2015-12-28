@@ -1,15 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
 p {
   font-family: monospace;
   /*line-height: 18px;*/
-  font-size: 24px;
-  line-height: .75em;
-  background-color: lightblue;
-  color: green;
+  font-size: 43px;
+  line-height: .7em;
+  background-color: #444;
+  color: orange;
+  letter-spacing: 3px;
   white-space: pre;
   margin: 0px;
+  padding-top: 5px;
 }
 
 .container {
-  width: 36em;
-  border: 2px solid black;
+  width: 18em;
 }

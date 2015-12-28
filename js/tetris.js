@@ -1,8 +1,8 @@
 var board = new Board();
 
 function Board() {
-  this.height = 20;
-  this.width = 40;
+  this.height = 22;
+  this.width = 10;
   this.activeTetramino = {};
 
   this.init = function() {
@@ -21,12 +21,19 @@ function Board() {
 
   this.display = function() {
     document.getElementById("game").innerHTML = "";
-    for (var h = 0; h < this.height; h++) {
-      var row = document.createElement("p");
-      var text = document.createTextNode(this.board[h].join(''));
-      row.appendChild(text);
-      document.getElementById("game").appendChild(row);
+    for (var row = 2; row < this.height; row++) {
+      var p = document.createElement("p");
+      var text = document.createTextNode(this.board[row].join(''));
+      p.appendChild(text);
+      document.getElementById("game").appendChild(p);
     }
+  }
+
+  this.clearRow = function(lines) {
+    lines.forEach(function(line) {
+      that.board.splice(line, 1);
+      that.board.unshift((new Array(that.width).fill(' ')));
+    });
   }
 
   this.collisionCheck = function(tetramino,xCol,yRow,direction) {
@@ -34,19 +41,33 @@ function Board() {
     for (var block = 0; block < updatedPiece.length; block++) {
       var newPos = [updatedPiece[block][0] + yRow, updatedPiece[block][1] + xCol];
       if (newPos[0] === this.height) {
-        this.activeTetramino = new Tetramino(this);
+        board.activeTetramino = new Tetramino(this);
         return false;
       } else if (newPos[1] < 0 || newPos[1] >= this.width) {
-        console.log(newPos[1]);
         return false;
-      } else if (this.board[newPos[0]][newPos[1]] === "█") {
+      } else if (this.board[newPos[0]][newPos[1]] === '█') {
           if (direction === 'down') {
-            this.activeTetramino = new Tetramino(this);
+            board.activeTetramino = new Tetramino(this);
           }
           return false;
       }
     }
     return true;
+  }
+
+  this.lineCheck = function() {
+    var linesToClear = [];
+    for (var row = 0; row < this.height; row++) {
+      var line = this.board[row].join('')
+      if ((line.match(/█/g)||[]).length === this.width) {
+        linesToClear.push(row);
+      }
+    }
+    if (linesToClear.length > 0) {
+      this.clearRow(linesToClear);
+      return true;
+    }
+    return false;
   }
 
   this.draw = function(tetramino) {
@@ -87,10 +108,10 @@ function Board() {
 };
 
 function Tetramino(board) {
-  this.arrangementType = Math.round(Math.random() * 6) + 1;
+  this.arrangementType = Math.floor(Math.random() * 7) + 1;
   this.pivot = {
-    'xCol': (board.width/2) - 1,
-    'yRow': 2
+    'xCol': Math.round(board.width /2),
+    'yRow': 1
   };
   this.blocks = [];
 
@@ -102,9 +123,11 @@ function Tetramino(board) {
       if (direction === "rotateClockwise") {
         this.arrangement = this.rotate();
       }
-    };
+    }
     this.blocks = this.build();
-    board.draw(this);
+    if (!board.lineCheck()) {
+      board.draw(this);
+    }
     board.display();
   }
 
@@ -134,9 +157,9 @@ function Tetramino(board) {
         break;
       case 4: // O
         return [
-          [+1, 0],
-          [+1, +1],
-          [0, +1]
+          [-1, 0],
+          [-1, -1],
+          [0, -1]
         ];
         break;
       case 5: // J
