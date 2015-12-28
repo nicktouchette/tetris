@@ -1,16 +1,15 @@
-body {
-  font-size: 11px;
-}
-
 p {
   font-family: monospace;
-  line-height: 18px;
-  font-size: 18px;
-  background-color: red;
+  /*line-height: 18px;*/
+  font-size: 24px;
+  line-height: .75em;
+  background-color: lightblue;
+  color: green;
   white-space: pre;
   margin: 0px;
 }
 
 .container {
-  width: 40em;
+  width: 36em;
+  border: 2px solid black;
 }

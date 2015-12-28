@@ -3,7 +3,7 @@ var board = new Board();
 function Board() {
   this.height = 20;
   this.width = 40;
-  this.currentBlock = {};
+  this.activeTetramino = {};
 
   this.init = function() {
     this.board = [];
@@ -13,11 +13,11 @@ function Board() {
       this.board.push([]);
       for (var w = 0; w < this.width; w++) {
         this.board[h].push(' ');
-      };
-    };
-    this.currentBlock = new Block(this)
+      }
+    }
+    this.activeTetramino = new Tetramino(this)
     this.update();
-  };
+  }
 
   this.display = function() {
     document.getElementById("game").innerHTML = "";
@@ -26,152 +26,171 @@ function Board() {
       var text = document.createTextNode(this.board[h].join(''));
       row.appendChild(text);
       document.getElementById("game").appendChild(row);
-    };
-  };
+    }
+  }
 
-  this.collisionCheck = function(block,xCol,yRow,direction) {
-    for (var i = 0; i < block.piece.length; i++) {
-      var newPos = [block.piece[i][1] + block.position.yRow + yRow, block.piece[i][0] + block.position.xCol + xCol];
+  this.collisionCheck = function(tetramino,xCol,yRow,direction) {
+    var updatedPiece = tetramino.build(direction === 'rotateClockwise'?tetramino.rotate():null);
+    for (var block = 0; block < updatedPiece.length; block++) {
+      var newPos = [updatedPiece[block][0] + yRow, updatedPiece[block][1] + xCol];
       if (newPos[0] === this.height) {
-        this.currentBlock = new Block(this);
+        this.activeTetramino = new Tetramino(this);
         return false;
-      } else if (newPos[1] < 0 || newPos[1] === this.width) {
+      } else if (newPos[1] < 0 || newPos[1] >= this.width) {
+        console.log(newPos[1]);
         return false;
-      } else if (this.board[newPos[0]][newPos[1]] === "X") {
+      } else if (this.board[newPos[0]][newPos[1]] === "█") {
           if (direction === 'down') {
-            this.currentBlock = new Block(this);
+            this.activeTetramino = new Tetramino(this);
           }
           return false;
-      };
-    };
+      }
+    }
     return true;
-  };
+  }
 
-  this.draw = function(block) {
-    for (var i = 0; i < block.piece.length; i++) {
-      this.board[block.piece[i][1] + block.position.yRow][block.piece[i][0] + block.position.xCol] = 'X';
-    };
-  };
+  this.draw = function(tetramino) {
+    for (var i = 0; i < tetramino.blocks.length; i++) {
+      this.board[tetramino.blocks[i][0]][tetramino.blocks[i][1]] = '█';
+    }
+  }
 
-  this.undraw = function(block) {
-    for (var i = 0; i < block.piece.length; i++) {
-      this.board[block.piece[i][1] + block.position.yRow][block.piece[i][0] + block.position.xCol] = ' ';
-    };
-  };
+  this.undraw = function(tetramino) {
+    for (var i = 0; i < tetramino.blocks.length; i++) {
+      this.board[tetramino.blocks[i][0]][tetramino.blocks[i][1]] = ' ';
+    }
+  }
 
   var that = this;
   this.update = function() {
     that.moveBlock();
     setTimeout(that.update, 500);
-  };
+  }
 
   this.moveBlock = function(direction) {
     switch (direction) {
       case 'left':
-        this.currentBlock.updatePosition(-1, 0);
+        this.activeTetramino.updatePivot(-1, 0);
         break;
       case 'right':
-        this.currentBlock.updatePosition(+1, 0);
+        this.activeTetramino.updatePivot(+1, 0);
+        break;
+      case 'rotateClockwise':
+        this.activeTetramino.updatePivot(0, 0, 'rotateClockwise');
         break;
       default:
-        this.currentBlock.updatePosition(0, +1, 'down');
-    };
-  };
+        this.activeTetramino.updatePivot(0, +1, 'down');
+    }
+  }
 
   this.init();
 };
 
-function Block(board) {
-  this.position = {
+function Tetramino(board) {
+  this.arrangementType = Math.round(Math.random() * 6) + 1;
+  this.pivot = {
     'xCol': (board.width/2) - 1,
-    'yRow': 1,
-    'prevXCol': (board.width/2) - 1,
-    'prevYRow': 1
+    'yRow': 2
   };
+  this.blocks = [];
 
-  //  0   0    0   0  00   00  00
-  // 0X0  X    X   X  X0  0X    X0
-  //      00  00   0
-  //               0
-  this.updatePosition = function(xCol,yRow,direction) {
+  this.updatePivot = function(newXCol,newYRow,direction) {
     board.undraw(this);
-    if (board.collisionCheck(this,xCol,yRow,direction)) {
-      this.position.prevYRow = this.position.yRow;
-      this.position.prevXCol = this.position.xCol;
-      this.position.yRow += yRow;
-      this.position.xCol += xCol;
+    if (board.collisionCheck(this,newXCol,newYRow,direction)) {
+      this.pivot.yRow += newYRow;
+      this.pivot.xCol += newXCol;
+      if (direction === "rotateClockwise") {
+        this.arrangement = this.rotate();
+      }
     };
+    this.blocks = this.build();
     board.draw(this);
     board.display();
-  };
+  }
 
-  //  0
-  //  X0   [0,0],[0,-1],[-1,0],[+1,0]
-  //  0    [0,0],[0,+1],[-1,0],[+1,0]
-
-//x,y [col,row]
-  this.randomPiece = function(id) {
+  //x,y [col,row]
+  this.randomTetramino = function(id) {
     switch (id) {
-      case 1:
+      case 1: // I
         return [
-          [0, 0],
-          [0, -1],
           [-1, 0],
+          [-2, 0],
           [+1, 0]
         ];
         break;
-      case 2:
+      case 2: // T
         return [
-          [0, 0],
-          [0, -1],
-          [0, +1],
-          [+1, +1]
-        ];
-        break;
-      case 3:
-        return [
-          [0, 0],
-          [0, -1],
-          [0, +1],
-          [-1, +1]
-        ];
-        break;
-      case 4:
-        return [
-          [0, 0],
-          [0, -1],
-          [0, +1],
-          [0, +2]
-        ];
-        break;
-      case 5:
-        return [
-          [0, 0],
-          [0, -1],
-          [+1, -1],
-          [+1, 0]
-        ];
-        break;
-      case 6:
-        return [
-          [0, 0],
-          [0, -1],
-          [+1, -1],
-          [-1, 0]
-        ];
-        break;
-      case 7:
-        return [
-          [0, 0],
-          [0, -1],
+          [-1, 0],
           [-1, -1],
           [+1, 0]
         ];
         break;
-    };
-  };
-  // this.piece = this.randomPiece(3);
-  this.piece = this.randomPiece(Math.round(Math.random() * 6) + 1);
+      case 3: // L
+        return [
+          [-1, 0],
+          [+1, 0],
+          [+1, -1]
+        ];
+        break;
+      case 4: // O
+        return [
+          [+1, 0],
+          [+1, +1],
+          [0, +1]
+        ];
+        break;
+      case 5: // J
+        return [
+          [-1, 0],
+          [+1, 0],
+          [0, -1]
+        ];
+        break;
+      case 6: // Z
+        return [
+          [0, +1],
+          [-1, +1],
+          [+1, 0]
+        ];
+        break;
+      case 7: // S
+        return [
+          [-1, 0],
+          [0, +1],
+          [+1, +1]
+        ];
+        break;
+    }
+  }
+
+  this.rotate = function() {
+    // Define 90 degree rotation matrix
+    var x1 = 0, x2 = 1, y1 = -1, y2 = 0;
+    var x = 0, y = 0;
+
+    switch(this.arrangement) {
+    case 4:
+      return this.arrangement;
+      break;
+    }
+
+    return this.arrangement.map(function(block) {
+      x = block[0], y = block[1];
+      return [(x1 * x) + (x2 * y), (y1 * x) + (y2 * y)];
+    });
+  }
+
+  this.build = function(arrangement) {
+    if (!arrangement) {
+      arrangement = this.arrangement;
+    }
+    var renderedBlock = [[this.pivot.yRow, this.pivot.xCol]];
+    for (var block = 0; block < arrangement.length; block++) {
+      renderedBlock.push([(arrangement[block][1]*-1) + this.pivot.yRow, arrangement[block][0] + this.pivot.xCol]);
+    }
+    return renderedBlock;
+  }
+  this.arrangement = this.randomTetramino(this.arrangementType);
 };
 
 document.onkeydown = function(evt) {
@@ -182,6 +201,7 @@ document.onkeydown = function(evt) {
       break;
 
     case 38: // up
+      board.moveBlock('rotateClockwise');
       break;
 
     case 39: // right
@@ -194,6 +214,6 @@ document.onkeydown = function(evt) {
 
     default:
       return; // exit this handler for other keys
-  };
+  }
   evt.preventDefault(); // prevent the default action (scroll / move caret)
-};
+}
