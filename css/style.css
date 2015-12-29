@@ -1,20 +1,45 @@
-* {
-  box-sizing: border-box;
-}
-
-p {
+div p {
   font-family: monospace;
-  /*line-height: 18px;*/
-  font-size: 43px;
+  font-size: 40px;
+  width: 268px;
   line-height: .7em;
   background-color: #444;
-  color: orange;
   letter-spacing: 3px;
   white-space: pre;
   margin: 0px;
   padding-top: 5px;
 }
 
-.container {
-  width: 18em;
+#gameId1, #gameId2, #gameId3, #gameId4 {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  float: left;
+}
+
+#gameId1 {
+  color: orange;
+}
+
+#gameId2 {
+  color: red;
+}
+
+#gameId3 {
+  color: green;
+}
+
+#gameId4 {
+  color: lightblue;
+}
+
+#status {
+  float: left;
+  background-color: #444;
+  margin-right: 10px;
+  height: 90px;
+  padding: 10px;
+}
+#status p {
+  font-size: 26px;
+  width: 90px;
 }
