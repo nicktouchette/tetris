@@ -36,10 +36,12 @@ div p {
   float: left;
   background-color: #444;
   margin-right: 10px;
-  height: 90px;
-  padding: 10px;
+  height: 45px;
+  width: 90px;
+  padding: 30px 10px;
+
 }
 #status p {
   font-size: 26px;
-  width: 90px;
+  width: 75px;
 }
