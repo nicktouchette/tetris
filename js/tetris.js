@@ -51,7 +51,7 @@ function Board() {
 
   var that = this;
   this.update = function() {
-    that.activeTetramino.updatePivot(0, +1, 'down');
+    that.activeTetramino.updatePosition(0, +1, 'down');
     if (that.active) {
       setTimeout(that.update, 500);
     }
@@ -104,7 +104,7 @@ function Board() {
     this.display();
 
     this.next = [];
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 2; i++) {
       this.next.push(new Array(4).fill(' '));
     }
 
@@ -192,7 +192,7 @@ function Tetramino(board) {
     this.arrangement = definitions[this.shapeType];
   };
 
-  this.updatePivot = function(newXCol,newYRow,direction) {
+  this.updatePosition = function(newXCol,newYRow,direction) {
     board.removeFromArray(this);
     if (board.collisionCheck(this,newXCol,newYRow,direction)) {
       this.pivot.yRow += newYRow;
@@ -237,25 +237,47 @@ function Tetramino(board) {
   this.init();
 }
 
-document.onkeydown = function(evt) {
+// Toggle keystate on keydown and keyup
+var keyState = {};
+
+window.addEventListener('keydown',function(evt){
   evt = evt || window.event;
-  switch (evt.which || evt.keycode) {
-    case 37: // left
-      activeBoard.activeTetramino.updatePivot(-1, 0);
-      break;
-    case 38: // up
-      if (activeBoard.activeTetramino.shapeType != 3) {
-        activeBoard.activeTetramino.updatePivot(0, 0, 'rotateClockwise');
-      }
-      break;
-    case 39: // right
-      activeBoard.activeTetramino.updatePivot(+1, 0);
-      break;
-    case 40: // down
-      activeBoard.activeTetramino.updatePivot(0, +1, 'down');
-      break;
-    default:
-      return; // exit this handler for other keys
-  }
   evt.preventDefault(); // prevent the default action (scroll / move caret)
-};
+  keyState[evt.keyCode || evt.which] = true;
+  switch (evt.which || evt.keycode) {
+    case 38: // up
+      activeBoard.activeTetramino.updatePosition(0, 0, 'rotateClockwise');
+    break;
+  }
+},true);
+
+window.addEventListener('keyup',function(evt){
+  evt = evt || window.event;
+  evt.preventDefault(); // prevent the default action (scroll / move caret)
+  keyState[evt.keyCode || evt.which] = false;
+},true);
+
+// Use loop to to check for active keys
+function directionKeys() {
+  switch(true){
+    case keyState[40] && keyState[37]: //down+left
+      activeBoard.activeTetramino.updatePosition(0, +1, 'down');
+      activeBoard.activeTetramino.updatePosition(-1, 0);
+      break;
+    case keyState[40] && keyState[39]: //down+right
+      activeBoard.activeTetramino.updatePosition(0, +1, 'down');
+      activeBoard.activeTetramino.updatePosition(+1, 0);
+      break;
+    case keyState[40]: //down
+      activeBoard.activeTetramino.updatePosition(0, +1, 'down');
+      break;
+    case keyState[37]: //left
+      activeBoard.activeTetramino.updatePosition(-1, 0);
+      break;
+    case keyState[39]: //right
+      activeBoard.activeTetramino.updatePosition(+1, 0);
+      break;
+  }
+    setTimeout(directionKeys, 100);
+}
+directionKeys();
