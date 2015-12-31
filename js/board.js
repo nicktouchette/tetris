@@ -25,79 +25,79 @@ function Board() {
   };
 }
 
-// Instance Methods
-Board.prototype.init = function() {
-  // Fill array with blank spaces using form [Row][Col]
-  for (var row = 0; row < this.height; row++) {
-    this.board.push([]);
-    for (var col = 0; col < this.width; col++) {
-      this.board[row].push(' ');
-    }
-  }
+// // Instance Methods
+// Board.prototype.init = function() {
+//   // Fill array with blank spaces using form [Row][Col]
+//   for (var row = 0; row < this.height; row++) {
+//     this.board.push([]);
+//     for (var col = 0; col < this.width; col++) {
+//       this.board[row].push(' ');
+//     }
+//   }
 
-  // Add game container into DOM
-  var gameContainer = document.createElement("div");
-  gameContainer.setAttribute("id", "gameId" + this.gameID);
-  document.body.appendChild(gameContainer);
+//   // Add game container into DOM
+//   var gameContainer = document.createElement("div");
+//   gameContainer.setAttribute("id", "gameId" + this.gameID);
+//   document.body.appendChild(gameContainer);
 
-  // Add status bar to only the first instance of game
-  if (this.gameID === 1) {
-    var statusBar = document.createElement("div");
-    statusBar.setAttribute("id", "status");
-    document.body.appendChild(statusBar);
-  }
+//   // Add status bar to only the first instance of game
+//   if (this.gameID === 1) {
+//     var statusBar = document.createElement("div");
+//     statusBar.setAttribute("id", "status");
+//     document.body.appendChild(statusBar);
+//   }
 
-  // make new activeBlock and nextBlock if first instance
-  this.createNewBlock();
+//   // make new activeBlock and nextBlock if first instance
+//   this.createNewBlock();
 
-  // set DOM elements for board
-  this.gameWindow = document.getElementById("gameId" + this.gameID);
-  this.displayedRows = this.gameWindow.getElementsByTagName("p");
+//   // set DOM elements for board
+//   this.gameWindow = document.getElementById("gameId" + this.gameID);
+//   this.displayedRows = this.gameWindow.getElementsByTagName("p");
 
-  // display empty game window to init display in DOM
-  this.display();
+//   // display empty game window to init display in DOM
+//   this.display();
 
-  // active will determine if game still runs or not
-  this.active = true;
-};
+//   // active will determine if game still runs or not
+//   this.active = true;
+// };
 
-Board.prototype.display = function() {
-  // create empty paragraphs within DOM
-  if (this.displayedRows.length > 0) {
-    for (var row = 0; row < this.displayedRows.length; row++) {
-      var text = this.board[row + 0].join('');
-      if (this.displayedRows[row].textContent != text) {
-        this.displayedRows[row].innerText = text;
-      }
-    }
-  } else {
-    // create empty paragraphs within DOM
-    for (var row = 0; row < this.height; row++) {
-      var text = this.board[row].join('');
-      var textNode = document.createTextNode(text);
-      var p = document.createElement("p");
-      p.appendChild(textNode);
-      this.gameWindow.appendChild(p);
-    }
-  }
-};
+// Board.prototype.display = function() {
+//   // create empty paragraphs within DOM
+//   if (this.displayedRows.length > 0) {
+//     for (var row = 0; row < this.displayedRows.length; row++) {
+//       var text = this.board[row + 0].join('');
+//       if (this.displayedRows[row].textContent != text) {
+//         this.displayedRows[row].innerText = text;
+//       }
+//     }
+//   } else {
+//     // create empty paragraphs within DOM
+//     for (var row = 0; row < this.height; row++) {
+//       var text = this.board[row].join('');
+//       var textNode = document.createTextNode(text);
+//       var p = document.createElement("p");
+//       p.appendChild(textNode);
+//       this.gameWindow.appendChild(p);
+//     }
+//   }
+// };
 
-Board.prototype.displayNext = function() {
-  document.getElementById("status").innerHTML = "";
-  for (var row = 0; row < this.next.length; row++) {
-    var p = document.createElement("p");
-    var text = document.createTextNode(this.next[row].join(''));
-    p.appendChild(text);
-    document.getElementById("status").appendChild(p);
-  }
-};
+// Board.prototype.displayNext = function() {
+//   document.getElementById("status").innerHTML = "";
+//   for (var row = 0; row < this.next.length; row++) {
+//     var p = document.createElement("p");
+//     var text = document.createTextNode(this.next[row].join(''));
+//     p.appendChild(text);
+//     document.getElementById("status").appendChild(p);
+//   }
+// };
 
-Board.prototype.clearRow = function(lines) {
-  lines.forEach(function(line) {
-    this.board.splice(line, 1);
-    this.board.unshift((new Array(this.width).fill(' ')));
-  },this);
-};
+// Board.prototype.clearRow = function(lines) {
+//   lines.forEach(function(line) {
+//     this.board.splice(line, 1);
+//     this.board.unshift((new Array(this.width).fill(' ')));
+//   },this);
+// };
 
 Board.prototype.collisionCheck = function(tetramino, xCol, yRow, direction) {
   var updatedPiece = tetramino.build(direction === 'rotateClockwise' ? tetramino.rotate() : null);
@@ -151,29 +151,29 @@ Board.prototype.createNewBlock = function() {
   }
 };
 
-Board.prototype.lineCheck = function() {
-  var linesToClear = [];
-  for (var row = 0; row < this.height; row++) {
-    var line = this.board[row].join('');
-    if ((line.match(/█/g) || []).length === this.width) {
-      linesToClear.push(row);
-    }
-  }
-  if (linesToClear.length > 0) {
-    this.clearRow(linesToClear);
-    return true;
-  }
-  return false;
-};
+// Board.prototype.lineCheck = function() {
+//   var linesToClear = [];
+//   for (var row = 0; row < this.height; row++) {
+//     var line = this.board[row].join('');
+//     if ((line.match(/█/g) || []).length === this.width) {
+//       linesToClear.push(row);
+//     }
+//   }
+//   if (linesToClear.length > 0) {
+//     this.clearRow(linesToClear);
+//     return true;
+//   }
+//   return false;
+// };
 
-Board.prototype.addToArray = function(tetramino, where) {
-  tetramino.blocks.forEach(function(block, i) {
-    (where || this.board)[block[1]][block[0]] = '█';
-  },this);
-};
+// Board.prototype.addToArray = function(tetramino, where) {
+//   tetramino.blocks.forEach(function(block, i) {
+//     (where || this.board)[block[1]][block[0]] = '█';
+//   },this);
+// };
 
-Board.prototype.removeFromArray = function(tetramino) {
-  tetramino.blocks.forEach(function(block, i) {
-    this.board[block[1]][block[0]] = ' ';
-  },this);
-};
+// Board.prototype.removeFromArray = function(tetramino) {
+//   tetramino.blocks.forEach(function(block, i) {
+//     this.board[block[1]][block[0]] = ' ';
+//   },this);
+// };

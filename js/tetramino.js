@@ -9,21 +9,21 @@ function Tetramino(board) {
   this.init();
 }
 
-// Instance Methods
-Tetramino.prototype.init = function() {
-  // relative to upper left corner shape[id][x][y]
-  var definitions = [
-    [[+2, 0], [0, 0], [+1, 0], [+3, 0]], // I
-    [[+1, -1], [1, 0], [0, -1], [+2, -1]], // T
-    [[+1, -1], [+2, 0],[0, -1], [+2, -1]], // L
-    [[0, -1], [+1, 0], [0, 0], [+1, -1]], // O
-    [[+1, -1], [0, 0], [0, -1], [+2, -1]], // J
-    [[+1, -1], [0, 0], [+1, 0], [+2, -1]], // Z
-    [[+1, -1], [+1, 0], [+2, 0], [0, -1]] // S
-  ];
-  this.shapeType = Math.floor(Math.random() * definitions.length);
-  this.arrangement = definitions[this.shapeType];
-};
+// // Instance Methods
+// Tetramino.prototype.init = function() {
+//   // relative to upper left corner shape[id][x][y]
+//   var definitions = [
+//     [[+2, 0], [0, 0], [+1, 0], [+3, 0]], // I
+//     [[+1, -1], [1, 0], [0, -1], [+2, -1]], // T
+//     [[+1, -1], [+2, 0],[0, -1], [+2, -1]], // L
+//     [[0, -1], [+1, 0], [0, 0], [+1, -1]], // O
+//     [[+1, -1], [0, 0], [0, -1], [+2, -1]], // J
+//     [[+1, -1], [0, 0], [+1, 0], [+2, -1]], // Z
+//     [[+1, -1], [+1, 0], [+2, 0], [0, -1]] // S
+//   ];
+//   this.shapeType = Math.floor(Math.random() * definitions.length);
+//   this.arrangement = definitions[this.shapeType];
+// };
 
 Tetramino.prototype.updatePosition = function(newXCol, newYRow, rotate) {
   this.board.removeFromArray(this);
