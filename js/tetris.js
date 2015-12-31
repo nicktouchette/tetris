@@ -10,6 +10,7 @@ function Board() {
   this.height = 22;
   this.width = 10;
   this.board = [];
+  this.pieces = [];
 
   this.init = function() {
     // Fill array with blank spaces using form [Row][Col]
@@ -188,7 +189,13 @@ function Tetramino(board) {
       [[0, 0],[0, +1],[-1, +1],[+1, 0]], // Z
       [[0, 0],[-1, 0],[0, +1],[+1, +1]]  // S
     ];
-    this.shapeType = Math.floor(Math.random() * definitions.length);
+
+    if (board.pieces.length === 0) {
+      for (var i = 0; i < definitions.length; i++) {
+        board.pieces.push(i,i,i,i);
+      }
+    }
+    this.shapeType = board.pieces.splice(Math.floor(Math.random() * board.pieces.length -1), 1);
     this.arrangement = definitions[this.shapeType];
   };
 
