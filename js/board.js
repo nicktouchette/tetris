@@ -9,17 +9,21 @@ function Board() {
   // when writing to board use [row, col];
   this.board = [];
 
-  this.init();
-
   this.update = function() {
-    that.activeTetramino.updatePosition(0, +1, 'down');
+    that.activeTetramino.updatePosition(0, +1);
     if (that.active) {
       setTimeout(that.update, 500);
     }
-  }
+  };
   var that = this;
-  this.update(this);
-};
+  this.init(that);
+  this.update();
+
+  // add click event to each game container to toggle keyboard focus
+  this.gameWindow.onclick = function() {
+    activeBoard = players[that.gameID];
+  };
+}
 
 // Instance Methods
 Board.prototype.init = function() {
@@ -53,11 +57,6 @@ Board.prototype.init = function() {
   // display empty game window to init display in DOM
   this.display();
 
-  // add click event to each game container to toggle keyboard focus
-  gameContainer.onclick = function() {
-    activeBoard = players[that.gameID]
-  }
-
   // active will determine if game still runs or not
   this.active = true;
 };
@@ -66,14 +65,14 @@ Board.prototype.display = function() {
   // create empty paragraphs within DOM
   if (this.displayedRows.length > 0) {
     for (var row = 0; row < this.displayedRows.length; row++) {
-      var text = this.board[row + 2].join('');
+      var text = this.board[row + 0].join('');
       if (this.displayedRows[row].textContent != text) {
         this.displayedRows[row].innerText = text;
       }
     }
   } else {
     // create empty paragraphs within DOM
-    for (var row = 2; row < this.height; row++) {
+    for (var row = 0; row < this.height; row++) {
       var text = this.board[row].join('');
       var textNode = document.createTextNode(text);
       var p = document.createElement("p");
@@ -102,26 +101,33 @@ Board.prototype.clearRow = function(lines) {
 
 Board.prototype.collisionCheck = function(tetramino, xCol, yRow, direction) {
   var updatedPiece = tetramino.build(direction === 'rotateClockwise' ? tetramino.rotate() : null);
-  for (var block = 0; block < updatedPiece.length; block++) {
-    var newPos = { 'x': updatedPiece[block][0] + xCol, 'y': updatedPiece[block][1] + yRow };
-
-    if (newPos.y === this.height) {
-      this.createNewBlock();
-      return false;
-    } else if (newPos.x < 0 || newPos.x >= this.width) {
-      return false;
-    } else if (this.board[newPos.y][newPos.x] != ' ') {
-      if (direction === 'down') {
-        if (newPos.y <= 2) {
-          this.active = false;
+  return updatedPiece.some(function(block) {
+    var newPos = { 'x': block[0] + xCol, 'y': block[1] + yRow };
+    switch(true) {
+      case (newPos.x < 0 || newPos.x >= this.width):
+        return true;
+      case (newPos.y === this.height):
+        this.createNewBlock();
+        return true;
+      case (this.board[newPos.y][newPos.x] != ' '):
+        if (xCol !== 0) {
+          if (this.board[block[1]+1][block[0]] === ' '){
+          } else {
+            this.createNewBlock();
+          }
+          return true;
         } else {
-          this.createNewBlock();
+          if (newPos.y <= 2) {
+            this.active = false;
+          } else {
+            this.createNewBlock();
+          }
+          return true;
         }
-      }
-      return false;
+          // if (newPos.y <= 2) {
+          //   this.active = false;
     }
-  }
-  return true;
+  }, this);
 };
 
 Board.prototype.createNewBlock = function() {
@@ -148,7 +154,7 @@ Board.prototype.createNewBlock = function() {
 Board.prototype.lineCheck = function() {
   var linesToClear = [];
   for (var row = 0; row < this.height; row++) {
-    var line = this.board[row].join('')
+    var line = this.board[row].join('');
     if ((line.match(/█/g) || []).length === this.width) {
       linesToClear.push(row);
     }

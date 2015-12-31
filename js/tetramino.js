@@ -7,7 +7,7 @@ function Tetramino(board) {
   };
   this.blocks = [];
   this.init();
-};
+}
 
 // Instance Methods
 Tetramino.prototype.init = function() {
@@ -25,12 +25,13 @@ Tetramino.prototype.init = function() {
   this.arrangement = definitions[this.shapeType];
 };
 
-Tetramino.prototype.updatePosition = function(newXCol, newYRow, newDirection) {
+Tetramino.prototype.updatePosition = function(newXCol, newYRow, rotate) {
   this.board.removeFromArray(this);
-  if (this.board.collisionCheck(this, newXCol, newYRow, newDirection)) {
+  var collide = this.board.collisionCheck(this, newXCol, newYRow, rotate);
+  if (!collide) {
     this.position.yRow += newYRow;
     this.position.xCol += newXCol;
-    if (newDirection === "rotateClockwise") {
+    if (rotate === "rotateClockwise") {
       this.arrangement = this.rotate();
     }
   }
@@ -47,7 +48,7 @@ Tetramino.prototype.rotate = function() {
   var x = 0, y = 0;
 
   return this.arrangement.map(function(block) {
-    x = block[0], y = block[1];
+    var x = block[0], y = block[1];
     return [(x1 * x) + (x2 * y), (y1 * x) + (y2 * y)];
   });
 };
@@ -67,4 +68,4 @@ Tetramino.prototype.build = function(arrangement) {
                       ((arrangement[block][1]+y) * -1) + this.position.yRow]);
   }
   return renderedBlock;
-}
+};

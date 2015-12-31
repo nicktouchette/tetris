@@ -1,5 +1,7 @@
 // Toggle keystate on keydown and keyup
 var keyState = {};
+var activeBoard = players[1];
+
 window.addEventListener('keydown',function(evt){
   evt = evt || window.event;
   evt.preventDefault(); // prevent the default action (scroll / move caret)
