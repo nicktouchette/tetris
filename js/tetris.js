@@ -54,7 +54,7 @@ function Board() {
   this.update = function() {
     that.activeTetramino.updatePosition(0, +1, 'down');
     if (that.active) {
-      setTimeout(that.update, 500);
+      setTimeout(that.update, 300);
     }
   };
 
@@ -123,21 +123,21 @@ function Board() {
       var newPos = [updatedPiece[block][0] + yRow, updatedPiece[block][1] + xCol];
       if (newPos[0] === this.height) {
         this.createNewBlock();
-        return false;
+        return true;
       } else if (newPos[1] < 0 || newPos[1] >= this.width) {
-        return false;
+        return true;
       } else if (this.board[newPos[0]][newPos[1]] != ' ') {
           if (direction === 'down') {
             if (newPos[0] <= 2) {
-              this.playing = false;
+              this.playing = true;
             } else {
               this.createNewBlock();
             }
           }
-          return false;
+          return true;
       }
     }
-    return true;
+    return false;
   };
 
   this.lineCheck = function() {
@@ -199,9 +199,26 @@ function Tetramino(board) {
     this.arrangement = definitions[this.shapeType];
   };
 
+  this.fastDrop = function() {
+    var collide = false;
+    while (!collide) {
+      board.removeFromArray(this);
+      collide = board.collisionCheck(this,0,+1,'down');
+      if (!collide) {
+        this.pivot.yRow += 1;
+        this.blocks = this.build();
+        board.addToArray(this);
+      }
+    }
+    if (!board.lineCheck()) {
+      board.addToArray(this);
+    }
+    board.display();
+  };
+
   this.updatePosition = function(newXCol,newYRow,direction) {
     board.removeFromArray(this);
-    if (board.collisionCheck(this,newXCol,newYRow,direction)) {
+    if (!board.collisionCheck(this,newXCol,newYRow,direction)) {
       this.pivot.yRow += newYRow;
       this.pivot.xCol += newXCol;
       if (direction === "rotateClockwise") {
@@ -254,7 +271,9 @@ window.addEventListener('keydown',function(evt){
   switch (evt.which || evt.keycode) {
     case 38: // up
       activeBoard.activeTetramino.updatePosition(0, 0, 'rotateClockwise');
-    break;
+      break;
+    case 32: // space
+      activeBoard.activeTetramino.fastDrop();
   }
 },true);
 
