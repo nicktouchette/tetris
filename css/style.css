@@ -1,5 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #222;
+  font-family: "Lucida Console", Monaco, monospace;
+  margin: 10px;
+}
+
+ul {
+  font-family: arial, sans-serif;
+  list-style: none;
+  text-align: center;
+}
+
+li {
+  font-size: 18px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 15px;
+}
+
 div p {
-  font-family: monospace;
   font-size: 40px;
   width: 268px;
   line-height: .7em;
@@ -7,13 +32,15 @@ div p {
   letter-spacing: 3px;
   white-space: pre;
   margin: 0px;
-  padding-top: 5px;
+  padding-top: 3px;
+  padding-bottom: 2px;
 }
 
 #gameId1, #gameId2, #gameId3, #gameId4 {
   margin-right: 10px;
   margin-bottom: 10px;
   float: left;
+  border: 2px solid black;
 }
 
 #gameId1 {
@@ -34,14 +61,29 @@ div p {
 
 #status {
   float: left;
+  padding: 10px 10px;
   background-color: #444;
   margin-right: 10px;
+  border: 2px solid black ;
+}
+
+#next {
   height: 45px;
   width: 90px;
   padding: 30px 10px;
-
+  background-color: #777;
+  border: 2px solid black;
 }
-#status p {
+
+#next p {
   font-size: 26px;
   width: 75px;
+  background-color: inherit;
+}
+
+#stats {
+  padding: 0px 0px 15px 0px;
+  margin-top: 10px;
+  background-color: #777;
+  border: 2px solid black;
 }
