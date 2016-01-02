@@ -19,6 +19,7 @@
     this.speed = 500;
     this.paused = false;
     this.linesCleared = 0;
+    this.bestScore = localStorage.getItem('bestScore') || 0;
 
     this.init = function() {
       // Fill array with blank spaces using form [Row][Col]
@@ -51,10 +52,24 @@
         var ul = document.createElement("ul");
 
         // SCORE
-        var scoreCaption = document.createTextNode("SCORE");
+        var caption = document.createTextNode("BEST");
         var h2 = document.createElement("h2");
         var li = document.createElement("li");
-        h2.appendChild(scoreCaption);
+        h2.appendChild(caption);
+        li.appendChild(h2);
+        ul.appendChild(li);
+
+        var bestScore = document.createTextNode(this.bestScore);
+        li = document.createElement("li");
+        li.setAttribute("id", "best");
+        li.appendChild(bestScore);
+        ul.appendChild(li);
+
+        // SCORE
+        caption = document.createTextNode("SCORE");
+        var h2 = document.createElement("h2");
+        var li = document.createElement("li");
+        h2.appendChild(caption);
         li.appendChild(h2);
         ul.appendChild(li);
 
@@ -65,10 +80,10 @@
         ul.appendChild(li);
 
         // LEVEL
-        var levelCaption = document.createTextNode("LEVEL");
+        caption = document.createTextNode("LEVEL");
         h2 = document.createElement("h2");
         li = document.createElement("li");
-        h2.appendChild(levelCaption);
+        h2.appendChild(caption);
         li.appendChild(h2);
         ul.appendChild(li);
 
@@ -79,10 +94,10 @@
         ul.appendChild(li);
 
         // LINES
-        var lcCaption = document.createTextNode("LINES");
+        caption = document.createTextNode("LINES");
         h2 = document.createElement("h2");
         li = document.createElement("li");
-        h2.appendChild(lcCaption);
+        h2.appendChild(caption);
         li.appendChild(h2);
         ul.appendChild(li);
 
@@ -118,9 +133,6 @@
       if (that.active) {
         setTimeout(that.update, (that.speed - that.level * 30));
       } else {
-        // clearTimeout(directionKeyTimer);
-        // window.removeEventListener('keyup', keyup, true);
-        // window.removeEventListener('keydown', keydown, true);
         that.displayedRows[Math.floor((that.height - 3)/2)].innerText = " GAMEOVER ";
       }
     };
@@ -264,6 +276,14 @@
 
       element = document.getElementById("score");
       element.innerText = this.score;
+
+      element = document.getElementById("best");
+      if (this.score < this.bestScore) {
+        element.innerText = this.bestScore;
+      } else {
+        element.innerText = this.score;
+        localStorage.setItem('bestScore', this.score);
+      }
     };
 
     // row, col
