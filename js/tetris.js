@@ -2,7 +2,7 @@
   'use strict';
 
   // Create 4 player windows and set first window as keydown target
-  var players = [new Board(),new Board(),new Board(),new Board()];
+  var players = [new Board(), new Board(), new Board(), new Board()];
   var activeBoard = players[0];
 
   function Board() {
@@ -33,13 +33,17 @@
       // Add game container into DOM
       var gameContainer = document.createElement("div");
       gameContainer.setAttribute("id", "gameId" + this.gameID);
+      var board = document.createElement("div");
+      board.setAttribute("class", "board");
+
+      board.appendChild(gameContainer);
 
       var h2 = document.createElement("h2");
       var caption = document.createTextNode("Player " + this.gameID);
       h2.appendChild(caption);
       gameContainer.appendChild(h2);
 
-      document.body.appendChild(gameContainer);
+      document.body.appendChild(board);
 
       // Add status bar to only the first instance of game
       if (this.gameID === 1) {
@@ -149,7 +153,6 @@
         that.displayedRows[Math.floor((this.height - 3)/2)].innerText = "  PAUSED  ";
       }
     };
-
 
     this.display = function(init) {
       var hideRowAmount = 2;
