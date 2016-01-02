@@ -117,11 +117,17 @@
       that.activeTetramino.updatePosition(0, +1, 'down');
       if (that.active) {
         setTimeout(that.update, (that.speed - that.level * 30));
+      } else {
+        clearTimeout(directionKeyTimer);
+        window.removeEventListener('keyup', keyup, true);
+        window.removeEventListener('keydown', keydown, true);
+        that.displayedRows[Math.floor((that.height-1)/2)].innerText = " GAMEOVER ";
       }
     };
 
     this.pause = function() {
       this.paused = !this.paused;
+      that.displayedRows[Math.floor((that.height-1)/2)].innerText = "  PAUSED  ";
     };
 
     this.display = function(init) {
@@ -195,7 +201,7 @@
         } else if (this.board[newPos[0]][newPos[1]] != ' ') {
             if (direction === 'down') {
               if (newPos[0] <= 2) {
-                this.playing = true;
+                this.active = false;
               } else {
                 this.createNewBlock();
               }
@@ -371,7 +377,7 @@
   // Toggle keystate on keydown and keyup
   var keyState = {};
 
-  window.addEventListener('keydown',function(evt){
+  var keydown = function(evt) {
     evt = evt || window.event;
     evt.preventDefault(); // prevent the default action (scroll / move caret)
     keyState[evt.keyCode || evt.which] = true;
@@ -386,15 +392,19 @@
         activeBoard.pause();
         break;
     }
-  },true);
+  };
+  window.addEventListener('keydown', keydown, true);
 
-  window.addEventListener('keyup',function(evt){
+
+  var keyup = function(evt) {
     evt = evt || window.event;
     evt.preventDefault(); // prevent the default action (scroll / move caret)
     keyState[evt.keyCode || evt.which] = false;
-  },true);
+  };
+  window.addEventListener('keyup', keyup, true);
 
   // Use loop to to check for active keys
+  var directionKeyTimer;
   function directionKeys() {
     switch(true){
       case keyState[40] && keyState[37]: //down+left
@@ -415,7 +425,7 @@
         activeBoard.activeTetramino.updatePosition(+1, 0);
         break;
     }
-      setTimeout(directionKeys, 100);
+      directionKeyTimer = setTimeout(directionKeys, 100);
   }
   directionKeys();
 }());
