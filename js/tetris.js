@@ -17,6 +17,7 @@
     this.score = 0;
     this.level = 0;
     this.speed = 500;
+    this.paused = false;
     this.linesCleared = 0;
 
     this.init = function() {
@@ -117,6 +118,10 @@
       if (that.active) {
         setTimeout(that.update, (that.speed - that.level * 30));
       }
+    };
+
+    this.pause = function() {
+      this.paused = !this.paused;
     };
 
     this.display = function(init) {
@@ -314,22 +319,24 @@
     };
 
     this.updatePosition = function(newXCol,newYRow,direction,droptype) {
-      board.removeFromArray(this);
-      if (!board.collisionCheck(this,newXCol,newYRow,direction)) {
-        this.pivot.yRow += newYRow;
-        this.pivot.xCol += newXCol;
-        if (droptype) {
-          board.score += 1;
+      if (!board.paused) {
+        board.removeFromArray(this);
+        if (!board.collisionCheck(this,newXCol,newYRow,direction)) {
+          this.pivot.yRow += newYRow;
+          this.pivot.xCol += newXCol;
+          if (droptype) {
+            board.score += 1;
+          }
+          if (direction === "rotateClockwise") {
+            this.arrangement = this.rotate();
+          }
         }
-        if (direction === "rotateClockwise") {
-          this.arrangement = this.rotate();
+        this.blocks = this.build();
+        if (!board.lineCheck()) {
+          board.addToArray(this);
         }
+        board.display();
       }
-      this.blocks = this.build();
-      if (!board.lineCheck()) {
-        board.addToArray(this);
-      }
-      board.display();
     };
 
     this.rotate = function() {
@@ -374,6 +381,10 @@
         break;
       case 32: // space
         activeBoard.activeTetramino.hardDrop();
+        break;
+      case 80:
+        activeBoard.pause();
+        break;
     }
   },true);
 
