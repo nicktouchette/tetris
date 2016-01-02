@@ -33,6 +33,12 @@
       // Add game container into DOM
       var gameContainer = document.createElement("div");
       gameContainer.setAttribute("id", "gameId" + this.gameID);
+
+      var h2 = document.createElement("h2");
+      var caption = document.createTextNode("Player " + this.gameID);
+      h2.appendChild(caption);
+      gameContainer.appendChild(h2);
+
       document.body.appendChild(gameContainer);
 
       // Add status bar to only the first instance of game
@@ -52,7 +58,7 @@
         var ul = document.createElement("ul");
 
         // SCORE
-        var caption = document.createTextNode("BEST");
+        caption = document.createTextNode("BEST");
         var h2 = document.createElement("h2");
         var li = document.createElement("li");
         h2.appendChild(caption);
