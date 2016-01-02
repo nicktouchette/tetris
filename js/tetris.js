@@ -2,7 +2,7 @@
   'use strict';
 
   // Create 4 player windows and set first window as keydown target
-  var players = [new Board(),new Board(),new Board(),new Board()];
+  var players = [new Board()];
   var activeBoard = players[0];
 
   function Board() {
