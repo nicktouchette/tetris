@@ -16,7 +16,7 @@ body {
 }
 
 div > h2 {
-  background-color: black;
+  background-color: #111;
   margin: 0;
   font-size: 18px;
   color: white;
@@ -34,14 +34,13 @@ li {
 
 h2 {
   font-size: 18px;
-  /*margin-top: 15px;*/
   color: white;
   background-color: #111;
 }
 
 div p {
   font-size: 40px;
-  width: 268px;
+  width: 100%;
   line-height: .7em;
   background-color: #2e4776;
   letter-spacing: 3px;
@@ -51,10 +50,10 @@ div p {
   padding-bottom: 2.5px;
 }
 
-#gameId1, #gameId2, #gameId3, #gameId4, #status {
+.board, #status {
   display: inline-block;
+  width: 270px;
   margin: 0px 10px 10px 0px;
-  /*float: left;*/
   border: 2px solid black;
   box-shadow: 9px 15px 16px 0px rgba(0, 0, 0, 0.56);
 }
@@ -76,7 +75,6 @@ div p {
 }
 
 #status {
-  /*float: left;*/
   width: 125px;
   margin-top: 24px;
   padding: 10px 10px;
@@ -86,7 +84,6 @@ div p {
 }
 
 #next {
-  height: 45px;
   padding: 30px 10px;
   background-color: #3d5786;
   border: 2px solid black;

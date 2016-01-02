@@ -2,10 +2,11 @@
 
 A flavor of Tetris developed using javascript and DOM manuipulation.
 
+[Play Here](http://nicktouchette.github.com/tetris)
+
 ## How it works
 
-Each gameboard is comprised of 22 paragraph elements with 10 monospaced spaces on each row.  However, the top 2 rows are hidden which is where the pieces spawn.
-The Tetramino's are represented as a group of 4 █'s.
+Each gameboard is comprised of 22 paragraph elements with 10 monospaced spaces on each row.  However, the top 2 rows are hidden which is where the pieces spawn.  The Tetramino's are represented as a group of 4 █'s.
 
 ````html
 <p>          </p>
@@ -34,13 +35,15 @@ The goal of Tetris is to complete a row with the blocks provided.  When complete
 
 ## Controls
 
-* Left or Right Arrow Key
+* __Left or Right Arrow Key__  
   Move the piece sideways
-* Up Arrow Key
+* __Up Arrow Key__  
   Rotate the piece clockwise
-* Spacebar
-  Hard drop a piece (instant drop)
-* P Key (toggle)
+* __Down Arrow Key__  
+  Soft drop (force 1 line down)
+* __Spacebar__  
+  Hard drop (instant drop)
+* __P Key__ _(toggle)_  
   Pause the game
 
 ## Multiplayer

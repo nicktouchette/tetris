@@ -33,13 +33,17 @@
       // Add game container into DOM
       var gameContainer = document.createElement("div");
       gameContainer.setAttribute("id", "gameId" + this.gameID);
+      var board = document.createElement("div");
+      board.setAttribute("class", "board");
+
+      board.appendChild(gameContainer);
 
       var h2 = document.createElement("h2");
       var caption = document.createTextNode("Player " + this.gameID);
       h2.appendChild(caption);
       gameContainer.appendChild(h2);
 
-      document.body.appendChild(gameContainer);
+      document.body.appendChild(board);
 
       // Add status bar to only the first instance of game
       if (this.gameID === 1) {
@@ -59,7 +63,7 @@
 
         // SCORE
         caption = document.createTextNode("BEST");
-        var h2 = document.createElement("h2");
+        h2 = document.createElement("h2");
         var li = document.createElement("li");
         h2.appendChild(caption);
         li.appendChild(h2);
@@ -73,8 +77,8 @@
 
         // SCORE
         caption = document.createTextNode("SCORE");
-        var h2 = document.createElement("h2");
-        var li = document.createElement("li");
+        h2 = document.createElement("h2");
+        li = document.createElement("li");
         h2.appendChild(caption);
         li.appendChild(h2);
         ul.appendChild(li);
@@ -149,7 +153,6 @@
         that.displayedRows[Math.floor((this.height - 3)/2)].innerText = "  PAUSED  ";
       }
     };
-
 
     this.display = function(init) {
       var hideRowAmount = 2;
