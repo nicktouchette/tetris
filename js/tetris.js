@@ -144,9 +144,12 @@
     };
 
     this.pause = function() {
-      this.paused = !this.paused;
-      that.displayedRows[Math.floor((that.height - 3)/2)].innerText = "  PAUSED  ";
+      if (this.active) {
+        this.paused = !this.paused;
+        that.displayedRows[Math.floor((this.height - 3)/2)].innerText = "  PAUSED  ";
+      }
     };
+
 
     this.display = function(init) {
       var hideRowAmount = 2;
