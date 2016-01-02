@@ -196,7 +196,7 @@
         if (newPos[0] === this.height) {
           this.createNewBlock();
           return true;
-        } else if (newPos[1] < 0 || newPos[1] >= this.width) {
+        } else if (newPos[1] < 0 || newPos[1] >= this.width || newPos[0] < 0) {
           return true;
         } else if (this.board[newPos[0]][newPos[1]] != ' ') {
             if (direction === 'down') {
@@ -343,7 +343,7 @@
           if (board.gameID === 1 && droptype === 'soft') {
             board.score += 1;
           }
-          if (direction === "rotateClockwise") {
+          if (direction === "rotateClockwise" && this.shapeType[0] !== 3) {
             this.arrangement = this.rotate();
           }
         }
@@ -359,6 +359,9 @@
       // Define 90 degree rotation matrix
       var x1 = 0, x2 = 1, y1 = -1, y2 = 0;
 
+      if (this.shapeType[0] === 3) {
+        return this.arrangement;
+      }
       return this.arrangement.map(function(block) {
         var x = block[0], y = block[1];
         return [(x1 * x) + (x2 * y), (y1 * x) + (y2 * y)];
