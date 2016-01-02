@@ -214,34 +214,38 @@
         this.clearRow(linesToClear);
         return true;
       }
+      this.updateStats();
       return false;
     };
 
     this.updateStats = function(lines) {
-      this.linesCleared += lines;
-      switch(lines) {
-        case 1:
-          this.score += 40 * (this.level + 1);
-          break;
-        case 2:
-          this.score += 100 * (this.level + 1);
-          break;
-        case 3:
-          this.score += 300 * (this.level + 1);
-          break;
-        case 4:
-          this.score += 1200 * (this.level + 1);
-          break;
-      }
+      var element;
+      if (lines) {
+        this.linesCleared += lines;
+        switch(lines) {
+          case 1:
+            this.score += 40 * (this.level + 1);
+            break;
+          case 2:
+            this.score += 100 * (this.level + 1);
+            break;
+          case 3:
+            this.score += 300 * (this.level + 1);
+            break;
+          case 4:
+            this.score += 1200 * (this.level + 1);
+            break;
+        }
 
-      if (this.linesCleared / 10 >= this.level + 1) {
-        this.level += 1;
-        var element = document.getElementById("level");
-        element.innerText = this.level;
-      }
+        if (this.linesCleared / 10 >= this.level + 1) {
+          this.level += 1;
+          element = document.getElementById("level");
+          element.innerText = this.level;
+        }
 
-      var element = document.getElementById("linesCleared");
-      element.innerText = this.linesCleared;
+        element = document.getElementById("linesCleared");
+        element.innerText = this.linesCleared;
+      }
 
       element = document.getElementById("score");
       element.innerText = this.score;
@@ -291,13 +295,14 @@
       this.arrangement = definitions[this.shapeType];
     };
 
-    this.fastDrop = function() {
+    this.hardDrop = function() {
       var collide = false;
       while (!collide) {
         board.removeFromArray(this);
         collide = board.collisionCheck(this,0,+1,'down');
         if (!collide) {
           this.pivot.yRow += 1;
+          board.score += 2;
           this.blocks = this.build();
           board.addToArray(this);
         }
@@ -308,11 +313,14 @@
       board.display();
     };
 
-    this.updatePosition = function(newXCol,newYRow,direction) {
+    this.updatePosition = function(newXCol,newYRow,direction,droptype) {
       board.removeFromArray(this);
       if (!board.collisionCheck(this,newXCol,newYRow,direction)) {
         this.pivot.yRow += newYRow;
         this.pivot.xCol += newXCol;
+        if (droptype) {
+          board.score += 1;
+        }
         if (direction === "rotateClockwise") {
           this.arrangement = this.rotate();
         }
@@ -365,7 +373,7 @@
         activeBoard.activeTetramino.updatePosition(0, 0, 'rotateClockwise');
         break;
       case 32: // space
-        activeBoard.activeTetramino.fastDrop();
+        activeBoard.activeTetramino.hardDrop();
     }
   },true);
 
@@ -379,15 +387,15 @@
   function directionKeys() {
     switch(true){
       case keyState[40] && keyState[37]: //down+left
-        activeBoard.activeTetramino.updatePosition(0, +1, 'down');
+        activeBoard.activeTetramino.updatePosition(0, +1, 'down', 'soft');
         activeBoard.activeTetramino.updatePosition(-1, 0);
         break;
       case keyState[40] && keyState[39]: //down+right
-        activeBoard.activeTetramino.updatePosition(0, +1, 'down');
+        activeBoard.activeTetramino.updatePosition(0, +1, 'down', 'soft');
         activeBoard.activeTetramino.updatePosition(+1, 0);
         break;
       case keyState[40]: //down
-        activeBoard.activeTetramino.updatePosition(0, +1, 'down');
+        activeBoard.activeTetramino.updatePosition(0, +1, 'down', 'soft');
         break;
       case keyState[37]: //left
         activeBoard.activeTetramino.updatePosition(-1, 0);
