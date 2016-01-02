@@ -59,7 +59,7 @@
 
         // SCORE
         caption = document.createTextNode("BEST");
-        var h2 = document.createElement("h2");
+        h2 = document.createElement("h2");
         var li = document.createElement("li");
         h2.appendChild(caption);
         li.appendChild(h2);
@@ -73,8 +73,8 @@
 
         // SCORE
         caption = document.createTextNode("SCORE");
-        var h2 = document.createElement("h2");
-        var li = document.createElement("li");
+        h2 = document.createElement("h2");
+        li = document.createElement("li");
         h2.appendChild(caption);
         li.appendChild(h2);
         ul.appendChild(li);

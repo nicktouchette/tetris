@@ -16,7 +16,7 @@ body {
 }
 
 div > h2 {
-  background-color: black;
+  background-color: #111;
   margin: 0;
   font-size: 18px;
   color: white;
@@ -34,7 +34,6 @@ li {
 
 h2 {
   font-size: 18px;
-  /*margin-top: 15px;*/
   color: white;
   background-color: #111;
 }
@@ -54,7 +53,6 @@ div p {
 #gameId1, #gameId2, #gameId3, #gameId4, #status {
   display: inline-block;
   margin: 0px 10px 10px 0px;
-  /*float: left;*/
   border: 2px solid black;
   box-shadow: 9px 15px 16px 0px rgba(0, 0, 0, 0.56);
 }
@@ -76,7 +74,6 @@ div p {
 }
 
 #status {
-  /*float: left;*/
   width: 125px;
   margin-top: 24px;
   padding: 10px 10px;
