@@ -2,7 +2,7 @@
   'use strict';
 
   // Create 4 player windows and set first window as keydown target
-  var players = [new Board()];
+  var players = [new Board(),new Board(),new Board(),new Board()];
   var activeBoard = players[0];
 
   function Board() {
@@ -118,16 +118,16 @@
       if (that.active) {
         setTimeout(that.update, (that.speed - that.level * 30));
       } else {
-        clearTimeout(directionKeyTimer);
-        window.removeEventListener('keyup', keyup, true);
-        window.removeEventListener('keydown', keydown, true);
-        that.displayedRows[Math.floor((that.height-1)/2)].innerText = " GAMEOVER ";
+        // clearTimeout(directionKeyTimer);
+        // window.removeEventListener('keyup', keyup, true);
+        // window.removeEventListener('keydown', keydown, true);
+        that.displayedRows[Math.floor((that.height - 3)/2)].innerText = " GAMEOVER ";
       }
     };
 
     this.pause = function() {
       this.paused = !this.paused;
-      that.displayedRows[Math.floor((that.height-1)/2)].innerText = "  PAUSED  ";
+      that.displayedRows[Math.floor((that.height - 3)/2)].innerText = "  PAUSED  ";
     };
 
     this.display = function(init) {
@@ -221,11 +221,15 @@
         }
       }
       if (linesToClear.length > 0) {
-        this.updateStats(linesToClear.length);
+        if (this.gameID === 1) {
+          this.updateStats(linesToClear.length);
+        }
         this.clearRow(linesToClear);
         return true;
       }
-      this.updateStats();
+      if (this.gameID === 1) {
+        this.updateStats();
+      }
       return false;
     };
 
@@ -313,7 +317,9 @@
         collide = board.collisionCheck(this,0,+1,'down');
         if (!collide) {
           this.pivot.yRow += 1;
-          board.score += 2;
+          if (board.gameID === 1) {
+            board.score += 2;
+          }
           this.blocks = this.build();
           board.addToArray(this);
         }
@@ -325,12 +331,16 @@
     };
 
     this.updatePosition = function(newXCol,newYRow,direction,droptype) {
-      if (!board.paused) {
+      if (!board.paused && board.active) {
+        if (droptype === 'hard') {
+          this.hardDrop();
+          return true;
+        }
         board.removeFromArray(this);
         if (!board.collisionCheck(this,newXCol,newYRow,direction)) {
           this.pivot.yRow += newYRow;
           this.pivot.xCol += newXCol;
-          if (droptype) {
+          if (board.gameID === 1 && droptype === 'soft') {
             board.score += 1;
           }
           if (direction === "rotateClockwise") {
@@ -386,7 +396,7 @@
         activeBoard.activeTetramino.updatePosition(0, 0, 'rotateClockwise');
         break;
       case 32: // space
-        activeBoard.activeTetramino.hardDrop();
+        activeBoard.activeTetramino.updatePosition(null, null, null, 'hard');
         break;
       case 80:
         activeBoard.pause();

@@ -5,30 +5,31 @@
 
 body {
   background-color: #222;
-  font-family: "Lucida Console", Monaco, monospace;
+  font-family: 'Roboto Mono', Monaco, monospace;
   margin: 10px;
 }
 
 ul {
-  font-family: arial, sans-serif;
   list-style: none;
   text-align: center;
 }
 
 li {
   font-size: 18px;
+  color: darkgrey;
 }
 
 h2 {
   font-size: 18px;
   margin-top: 15px;
+  color: white;
 }
 
 div p {
   font-size: 40px;
   width: 268px;
   line-height: .7em;
-  background-color: #444;
+  background-color: #2e4776;
   letter-spacing: 3px;
   white-space: pre;
   margin: 0px;
@@ -44,7 +45,7 @@ div p {
 }
 
 #gameId1 {
-  color: orange;
+  color: white;
 }
 
 #gameId2 {
@@ -62,16 +63,17 @@ div p {
 #status {
   float: left;
   padding: 10px 10px;
-  background-color: #444;
+  background-color: #2e4776;
   margin-right: 10px;
-  border: 2px solid black ;
+  border: 2px solid black;
+  color: white;
 }
 
 #next {
   height: 45px;
   width: 90px;
   padding: 30px 10px;
-  background-color: #777;
+  background-color: #3d5786;
   border: 2px solid black;
 }
 
@@ -84,6 +86,6 @@ div p {
 #stats {
   padding: 0px 0px 15px 0px;
   margin-top: 10px;
-  background-color: #777;
+  background-color: #3d5786;
   border: 2px solid black;
 }
