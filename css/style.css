@@ -9,9 +9,8 @@ html {
 
 body {
   display: inline-block;
-  /*background-color: #222;*/
+  background-color: #222;
 
-  background-image: radial-gradient(50% 115%, #292929 50%, #111111 100%);
   font-family: 'Roboto Mono', Monaco, monospace;
   padding: 10px 0px 0px 10px;
   margin: 0px auto;
