@@ -10,8 +10,7 @@ html {
 body {
   display: inline-block;
   background-color: #222;
-
-  font-family: 'Roboto Mono', Monaco, monospace;
+  font-family: monospace;
   padding: 10px 0px 0px 10px;
   margin: 0px auto;
 }
@@ -39,16 +38,19 @@ h2 {
   background-color: #111;
 }
 
-div p {
-  font-size: 40px;
+div p, #next p {
+  font-size: 3.23em;
   width: 100%;
-  line-height: .7em;
-  background-color: #2e4776;
-  letter-spacing: 3px;
+  line-height: .645em;
+  letter-spacing: 2px;
   white-space: pre;
   margin: 0px;
-  padding-top: 2.5px;
-  padding-bottom: 2.5px;
+  overflow: hidden;
+  height: 28px;
+}
+
+.board {
+  background-color: #2e4776;
 }
 
 .board, #status {
@@ -87,14 +89,13 @@ div p {
 #next {
   border: 2px solid black;
   border-bottom: 0px;
-  padding: 30px 10px;
+  padding: 30px 0px;
   background-color: #3d5786;
 }
 
 #next p {
-  margin: 0px auto;
-  font-size: 26px;
-  width: 75px;
+  /*font-size: 26px;*/
+  width: 100%;
   background-color: inherit;
 }
 
